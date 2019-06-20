@@ -1,0 +1,11 @@
+version: "3"
+services:
+  jenkins:
+     image: 'jenkins/jenkins:lts'
+     container_name: jenkins
+     restart: always
+     ports:
+      - '18080:8080'
+      - '15000:50000'
+     volumes:
+      - '/data/dockerv/jenkins_home:/var/jenkins_home'
