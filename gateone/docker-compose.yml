@@ -1,0 +1,35 @@
+version: "3"
+services:
+    gateone:
+        image: liftoff/gateone 
+        container_name: gateone 
+        volumes:
+          #将gateone配置文件挂载到本机，为了以后进行修改，如https改为http
+          - /data/dockerv/gateone:/etc/gateone/conf.d
+          #将默认ssh免密码登录路径挂载到本机
+          - /data/dockerv/gateone/users:/gateone/users
+        ports:
+          - "1443:443" 
+          - "2345:22"
+        command: gateone
+        environment:
+          - TZ=Asia/Shangha
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+        

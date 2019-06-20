@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  nfs-server:
+    container_name: nfs-server
+    restart: always
+    image: fuzzle/docker-nfs-server:latest
+    environment:
+      NFS_EXPORT_DIR_1: /nfs
+      NFS_EXPORT_DOMAIN_1: \*
+      NFS_EXPORT_OPTIONS_1: ro,insecure,no_subtree_check,no_root_squash,fsid=1
+    ports:
+      - "11111:111"
+      - "2049:2049"
+      - "32765:32765"
+      - "32766:32766"
+      - "32767:32767" 
+      - "11111:111/udp"
+      - "2049:2049/udp"
+      - "32765:32765/udp"
+      - "32766:32766/udp"
+      - "32767:32767/udp"
+    volumes:
+      - /data/nfs:/nfs 
+     

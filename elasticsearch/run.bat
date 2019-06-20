@@ -1,0 +1,1 @@
+docker-compose -f .\es5.5.6-docker-singal.yml up

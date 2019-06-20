@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  kafka-manager:
+    image: sheepkiller/kafka-manager    
+    environment:
+      ZK_HOSTS: 10.0.75.2:2181
+      APPLICATION_SECRET: "wucy"
+    ports:
+      - "9000:9000"
+    expose:
+      - "9000"

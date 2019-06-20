@@ -1,0 +1,1 @@
+bin/elasticsearch-plugin remove x-pack
