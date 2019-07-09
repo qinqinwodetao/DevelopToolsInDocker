@@ -1,0 +1,17 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: dolphin-test-jar-8080
+  namespace: dolphin
+spec:
+  ports:
+  - name: tcp-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    catagory: project
+    name: dolphin-test-jar
+  sessionAffinity: None
+  type: ClusterIP

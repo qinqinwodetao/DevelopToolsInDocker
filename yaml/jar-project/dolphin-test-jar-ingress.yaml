@@ -1,0 +1,25 @@
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/session-cookie-hash: sha1
+    nginx.ingress.kubernetes.io/session-cookie-name: route
+    nginx.ingress.kubernetes.io/session-cookie-path: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.org/websocket-services: dolphin-test-jar-8080
+  labels:
+    catagory: project
+    name: dolphin-test-jar
+  name: dolphin-test-jar-default-route
+  namespace: dolphin
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: dolphin-test-jar-8080
+          servicePort: 8080
+        path: /dolphin-test-jar
