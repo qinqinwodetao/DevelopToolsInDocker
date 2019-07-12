@@ -1,0 +1,23 @@
+version: "3.3"
+services:
+  oap:
+    image: skywalking/oap
+    container_name: oap
+    ports:
+      - 11800:11800
+      - 12800:12800
+    environment:
+      SW_STORAGE: elasticsearch
+      SW_STORAGE_ES_CLUSTER_NODES: 192.168.56.101:9200
+  ui:
+    image: skywalking/ui
+    container_name: ui
+    depends_on:
+      - oap
+    links:
+      - oap
+
+    ports:
+      - 18080:8080
+    environment:
+      SW_OAP_ADDRESS: oap:12800
