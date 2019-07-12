@@ -1,0 +1,13 @@
+version: "3"
+services:
+  jenkins:
+     image: 'jenkinsci/blueocean'
+     container_name: jenkins-bo
+     restart: always
+     environment:
+       - TZ=Asia/Shanghai
+     ports:
+      - '18080:8080'
+      - '15000:50000'
+     volumes:
+      - '/data/dockerv/jenkins_home:/var/jenkins_home'

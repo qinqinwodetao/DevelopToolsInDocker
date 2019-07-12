@@ -1,0 +1,89 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dolphin-test-jar
+  namespace: dolphin
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      catagory: project
+      name: dolphin-test-jar
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        catagory: project
+        name: dolphin-test-jar
+    spec:
+      automountServiceAccountToken: true
+      containers:
+      - env:
+        - name: PROJECT_NAME
+          value: dolphin-test-jar
+        - name: CONFIG_NS
+          value: kedacom-project-namespace
+        - name: CLIENT_ID
+          value: dolphin-test-jar
+        - name: CLIENT_SECRET
+          value: bZWoWB
+        - name: JAVA_OPTS
+          value: -server -Xms1255m -Xmx1255m -XX:NewRatio=3 -XX:MetaspaceSize=128m
+            -XX:MaxMetaspaceSize=281m -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled
+            -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=70
+            -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/log/jvm/oom-${HOSTNAME}.hprof
+            -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/log/jvm/gcdetail-${HOSTNAME}.log
+            -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=10M
+            -XX:+PrintTenuringDistribution  -XX:OnOutOfMemoryError="curl ${PLATFORM_DOMAIN}/${PLATFORM_PATH}/api/project/alarm?projectName=${PROJECT_NAME}"
+        - name: LOG_NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        image: 10.65.4.2:5000/dev70-jdk-dolphin-test-jar-2019.07.09.11.07.51:log
+        imagePullPolicy: IfNotPresent
+        name: dolphin-test-jar
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 9203
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1537Mi
+          requests:
+            cpu: 101m
+            memory: 1537Mi
+        securityContext:
+          privileged: true
+          procMount: Default
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /log/user
+          name: logs
+        - mountPath: /data/share/keda
+          name: keda
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: default
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /data/logs/kubernetes/dev70/dolphin-test-jar
+          type: ""
+        name: logs
+      - name: keda
+        persistentVolumeClaim:
+          claimName: keda
