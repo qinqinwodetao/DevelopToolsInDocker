@@ -1,0 +1,19 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-access-public
+  namespace: dolphin
+spec:
+  podSelector:
+    matchLabels: {}
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            policy: public
+      - podSelector:
+          matchLabels:
+            run: access	
+
+
+
